@@ -6,16 +6,20 @@
     <title>浮梦</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; width: 100%; overflow: hidden; }
-        #sdk-container { width: 100%; height: 100%; }
-        /* 加载提示 */
+        html, body { height: 100%; width: 100%; overflow: hidden; background: #f5f5f5; }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
         .loading {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #666;
+            color: #999;
             font-size: 16px;
         }
         .loading .dot {
@@ -27,25 +31,39 @@
             0%, 80%, 100% { opacity: 0; }
             40% { opacity: 1; }
         }
+        #sdk-container { width: 100%; height: 100%; }
     </style>
 </head>
 <body>
-    <div id="sdk-container">
-        <div class="loading">
-            浮梦正在苏醒<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-        </div>
+    <div class="loading" id="loading">
+        浮梦正在苏醒<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
     </div>
+    <div id="sdk-container"></div>
 
+    <!-- 方案1：扣子编程 WebSDK -->
     <script src="https://lf-cdn.coze.cn/obj/unpkg/latest/coze/web-sdk/dist/js-umd/index.min.js"></script>
     <script>
-        cozeWebSDK.init({
-            // Space Agent 项目 ID
-            projectId: '7639233788865970182',
-            // 使用 PAT 鉴权（快速体验方式，正式环境建议用 OAuth JWT）
-            refreshToken: () => 'pat_wrqdfjcjh6GGxc3Zk5li4CAZUoxxrtnRJfUDVa9KkKZZFktRTbLvfeRufXCcyfFR',
-            // 挂载容器
-            container: document.getElementById('sdk-container'),
-        });
+        try {
+            cozeWebSDK.init({
+                projectId: '7639233788865970182',
+                refreshToken: () => 'pat_SFfNrsqAZcodFqD7ctzRkoYbL6DKWQmItCeAbaHyLO8zfLm1H5HkaanOgG6F08bL',
+                container: document.getElementById('sdk-container'),
+            });
+            // 隐藏loading
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+            }, 3000);
+        } catch(e) {
+            // 方案1失败，尝试 Iframe 方案
+            document.getElementById('loading').innerHTML = '正在切换通道...';
+            var iframe = document.createElement('iframe');
+            iframe.src = 'https://sdk.coze.site?projectId=7639233788865970182&token=pat_SFfNrsqAZcodFqD7ctzRkoYbL6DKWQmItCeAbaHyLO8zfLm1H5HkaanOgG6F08bL';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            document.getElementById('sdk-container').appendChild(iframe);
+            document.getElementById('loading').style.display = 'none';
+        }
     </script>
 </body>
 </html>
