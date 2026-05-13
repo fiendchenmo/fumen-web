@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>浮梦</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; width: 100%; overflow: hidden; }
+        #sdk-container { width: 100%; height: 100%; }
+        /* 加载提示 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: #666;
+            font-size: 16px;
+        }
+        .loading .dot {
+            animation: blink 1.4s infinite both;
+        }
+        .loading .dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sdk-container">
+        <div class="loading">
+            浮梦正在苏醒<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        </div>
+    </div>
+
+    <script src="https://lf-cdn.coze.cn/obj/unpkg/latest/coze/web-sdk/dist/js-umd/index.min.js"></script>
+    <script>
+        cozeWebSDK.init({
+            // Space Agent 项目 ID
+            projectId: '7639233788865970182',
+            // 使用 PAT 鉴权（快速体验方式，正式环境建议用 OAuth JWT）
+            refreshToken: () => 'pat_wrqdfjcjh6GGxc3Zk5li4CAZUoxxrtnRJfUDVa9KkKZZFktRTbLvfeRufXCcyfFR',
+            // 挂载容器
+            container: document.getElementById('sdk-container'),
+        });
+    </script>
+</body>
+</html>
